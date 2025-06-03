@@ -1,0 +1,50 @@
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
+    environment:
+      PNPM_HOME: /root/.local/share/pnpm/store
+    env_file:
+       - .env
+    volumes:
+      - ./frontend:/frontend
+      - pnpm-store:/root/.local/share/pnpm/store
+      - /frontend/node_modules
+    restart: on-failure:3
+    depends_on:
+      - backend
+
+  # Backend service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - mongodb
+    env_file:
+       - .env
+    restart: on-failure:3
+
+  # MongoDB service
+  mongodb:
+    image: mongo:8.0.9
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./backend/app/scripts/seed.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    env_file:
+       - .env
+    restart: on-failure:3
+
+volumes:
+  pnpm-store:
+  mongodb_data:

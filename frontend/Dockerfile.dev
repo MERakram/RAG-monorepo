@@ -1,0 +1,19 @@
+FROM node:22.8.0-slim AS development
+
+RUN apt-get update -qq && apt-get install -qy  procps --no-install-recommends
+
+RUN apt-get install -y openssl
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+ENV PATH /frontend/node_modules/.bin:$PATH
+
+WORKDIR /frontend
+
+RUN echo "store-dir=/root/.local/share/pnpm/store" > /root/.npmrc
+COPY package.json pnpm-lock.yaml* ./
+
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
