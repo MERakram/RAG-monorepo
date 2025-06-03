@@ -7,6 +7,10 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_API_URL': '"__VITE_API_URL__"',
+    'import.meta.env.VITE_OLLAMA_BASE_URL': '"__VITE_OLLAMA_BASE_URL__"',
+  },
   preview: {
     port: 3002,
     allowedHosts: ['localhost','mia.ulysmcm.com']
