@@ -6,6 +6,7 @@ import { useAgentStore } from "../stores/agent";
 const username = ref("");
 const password = ref("");
 const errorMessage = ref("");
+const showPassword = ref(false);
 
 const router = useRouter();
 const authStore = useAgentStore();
@@ -17,6 +18,10 @@ async function handleLogin() {
   } else {
     errorMessage.value = "Invalid username or password.";
   }
+}
+
+function togglePasswordVisibility() {
+  showPassword.value = !showPassword.value;
 }
 </script>
 
@@ -46,14 +51,26 @@ async function handleLogin() {
             class="mb-2 block text-sm font-medium text-neutral-300"
             >Password</label
           >
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            class="w-full rounded-lg border border-neutral-700 bg-neutral-800 p-3 text-white placeholder-neutral-500 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-            placeholder="Enter your password"
-            required
-          />
+          <div class="relative">
+            <input
+              id="password"
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              class="w-full rounded-lg border border-neutral-700 bg-neutral-800 p-3 pr-12 text-white placeholder-neutral-500 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-300 transition-colors"
+              @click="togglePasswordVisibility"
+            >
+              <i 
+                :class="showPassword ? 'i-tabler-eye-off' : 'i-tabler-eye'" 
+                class="text-lg"
+              />
+            </button>
+          </div>
         </div>
         <div v-if="errorMessage" class="mb-4 text-sm text-red-400">
           <img src="../assets/tenor.gif" alt="Error" class="w-full h-auto" />

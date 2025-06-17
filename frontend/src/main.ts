@@ -1,12 +1,12 @@
 import { primaryColor } from "@roku-ui/vue";
 import { createApp } from "vue";
 import PrimeVue from 'primevue/config';
-import ToastService from 'primevue/toastservice';
 import Aura from '@primeuix/themes/aura';
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import App from "./App.vue";
 import router from "./router";
+import i18n from "./locales";
 
 import "@unocss/reset/tailwind.css";
 import "virtual:uno.css";
@@ -26,7 +26,7 @@ app.use(PrimeVue, {
         preset: Aura
     }
 });
-app.use(ToastService);
+app.use(i18n);
 app.use(pinia);
 app.use(router);
 router.isReady().then(() => app.mount('#app'));

@@ -30,6 +30,7 @@ langchain-ollama = "^0.3.2"
 langchain-chroma = "^0.2.3"
 pysqlite3-binary = "^0.5.4"
 pydantic = {extras = ["email"], version = "^2.11.4"}
+pymupdf = "^1.26.0"
 
 [poetry.group.dev.dependencies]
 essential-generators = "^1.0"

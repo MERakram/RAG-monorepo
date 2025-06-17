@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, defineComponent } from "vue";
+import { useI18n } from 'vue-i18n';
 import { md } from "../utils";
 import type { VNode } from "vue";
+
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -273,8 +276,8 @@ function copyContentToClipboard() {
           >
             {{
               isStreamingThinking
-                ? "Thinking..."
-                : "Thinking Process"
+                ? t('streaming.thinking')
+                : t('streaming.thinkingProcess')
             }}
             <!-- Add pulsing indicator when thinking is happening (visible even when collapsed) -->
             <div
@@ -295,12 +298,14 @@ function copyContentToClipboard() {
         </div>
         <div
           v-show="!reasoningCollapsed"
-          class="px-4 py-2 text-xs prose text-blue-300 dark:text-blue-200 border-t border-blue-800/30 overflow-auto"
+          class="px-4 py-2 w-full max-w-5xl text-xs prose text-blue-300 dark:text-blue-200 border-t border-blue-800/30 overflow-auto"
         >
-          <StreamMarkdownReasoning />
+          <div class="max-w-5xl w-full">
+            <StreamMarkdownReasoning />
+          </div>
           <div v-if="isStreamingThinking" class="mt-1 animate-pulse">
             <span class="text-blue-300 dark:text-blue-200 text-opacity-70">
-              Thinking in progress...
+              {{ t('streaming.thinkingInProgress') }}
             </span>
           </div>
         </div>
@@ -321,7 +326,7 @@ function copyContentToClipboard() {
               v-if="showCopyTooltip"
               class="pointer-events-none absolute right-0 whitespace-nowrap rounded bg-black/70 px-2 py-1 text-xs text-white -bottom-7 dark:bg-white/70 dark:text-black"
             >
-              Copied!
+              {{ t('streaming.copied') }}
             </div>
           </button>
         </div>
@@ -332,21 +337,44 @@ function copyContentToClipboard() {
         key="prose-main-content"
         class="hover text-sm prose prose-neutral children:mt-0 md:text-base prose-code:text-sm prose-h1:text-3xl prose-h2:text-xl prose-h3:text-lg prose-h4:text-base prose-h5:text-base dark:prose-invert prose-code:after:content-none prose-code:before:content-none max-w-full w-full"
       >
-        <!-- Show thinking indicator when streaming but not in thinking mode -->
-        <p
-          v-if="
-            props.loading && !mainContentTextToRender && !isStreamingThinking
-          "
-          class="text-gray-500 italic"
+        <!-- Enhanced RAG Processing indicator -->
+        <div
+          v-if="props.loading && !mainContentTextToRender && !isStreamingThinking"
+          class="flex flex-col gap-3 py-4"
         >
-          Processing...
-        </p>
+          <!-- Main processing indicator -->
+          <div class="flex items-center gap-3 text-neutral-300">
+            <div class="flex items-center justify-center w-8 h-8 bg-blue-500/20 rounded-full">
+              <div class="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-medium">{{ t('streaming.processingQuery') }}</span>
+              <span class="text-xs text-neutral-400">{{ t('streaming.ragSystemWorking') }}</span>
+            </div>
+          </div>
+          
+          <!-- Processing steps -->
+          <div class="ml-11 space-y-2">
+            <div class="flex items-center gap-2 text-xs text-neutral-400">
+              <div class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
+              <span>{{ t('streaming.analyzingQuery') }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-neutral-400">
+              <div class="w-1.5 h-1.5 bg-blue-400/60 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+              <span>{{ t('streaming.processingContext') }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-neutral-400">
+              <div class="w-1.5 h-1.5 bg-blue-400/40 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+              <span>{{ t('streaming.generatingResponse') }}</span>
+            </div>
+          </div>
+        </div>
         <!-- No content message when not loading -->
         <p
           v-else-if="!props.loading && !mainContentTextToRender"
           class="text-gray-500 italic"
         >
-          No content
+          {{ t('streaming.noContent') }}
         </p>
         <!-- Actual content -->
         <StreamMarkdownContent v-else-if="mainContentTextToRender" />
@@ -355,17 +383,17 @@ function copyContentToClipboard() {
       <!-- Sources Section -->
       <div
         v-if="sourcesText && sourcesText.length > 0"
-        class="mt-4 min-w-full w-full overflow-hidden rounded-xl bg-gray-100/20 dark:bg-gray-800/20 transition-all duration-300"
+        class="mt-4 min-w-full w-full overflow-hidden rounded-xl bg-blue-900/20 transition-all duration-300"
       >
         <div
           v-if="shouldCollapseSources"
           class="flex items-center justify-between px-4 py-2 cursor-pointer"
           @click="toggleSources"
         >
-          <div class="text-xs font-medium text-gray-700 dark:text-gray-300">
-            Sources ({{ sourceCount }})
+          <div class="text-xs font-medium text-blue-300 dark:text-blue-200">
+            {{ t('streaming.sources') }} ({{ sourceCount }})
           </div>
-          <button class="text-gray-700 dark:text-gray-300">
+          <button class="text-blue-300 dark:text-blue-200">
             <i
               :class="
                 sourcesCollapsed
@@ -378,12 +406,12 @@ function copyContentToClipboard() {
         </div>
         <div
           :class="{
-            'px-4 py-2': shouldCollapseSources,
-            'border-t border-gray-200/30 dark:border-gray-700/30':
+            'px-4 py-2': true,
+            'border-t border-blue-800/30':
               shouldCollapseSources && !sourcesCollapsed,
           }"
           v-show="!shouldCollapseSources || !sourcesCollapsed"
-          class="text-xs prose text-gray-700 dark:text-gray-300 overflow-auto"
+          class="text-xs prose max-w-5xl text-blue-300 dark:text-blue-200 overflow-auto"
         >
           <StreamMarkdownSources />
         </div>

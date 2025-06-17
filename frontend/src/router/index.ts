@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import ChatView from "../views/Chat.vue";
-import TranslateView from "../views/Translate.vue";
 import LoginView from "../views/Signin.vue";
 import Signup from "../views/Signup.vue";
 import { useAgentStore } from "../stores";
@@ -45,9 +44,9 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/translate",
-    name: "translate",
-    component: TranslateView,
+    path: "/compare",
+    name: "compare",
+    component: () => import('../views/Compare.vue'),
     meta: { requiresAuth: true },
   },
   {

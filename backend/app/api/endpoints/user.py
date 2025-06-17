@@ -22,7 +22,7 @@ router = APIRouter()
 
 # Get list of users with sorting options
 @router.get(
-    "/",
+    "",
     status_code=HTTP_200_OK,
     response_description="get users list",
     name="user: list_users",

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { vAutoAnimate } from '@formkit/auto-animate'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { chatHistory, useCurrentChat } from '../shared'
 import { deleteChat } from '../utils'
 
+const { t } = useI18n()
 const router = useRouter()
 function onNewChatClick() {
   router.push({
@@ -78,7 +80,7 @@ async function onDelete(e: MouseEvent) {
             class="w-full px-4 py-2 hover:bg-neutral-7"
             @click="onDelete"
           >
-            Delete
+            {{ t('common.delete') }}
           </button>
         </div>
       </menu>
@@ -89,18 +91,18 @@ async function onDelete(e: MouseEvent) {
       >
         <i class="i-tabler-plus h-5 w-5" />
         <span class="flex-grow-1 text-sm">
-          New Chat
+          {{ t('nav.newChat') }}
         </span>
       </button>
     </div>
     <div class="my-2 flex items-center justify-between px-4">
-      <span class="text-sm">Recent Chat</span>
+      <span class="text-sm">{{ t('nav.recentChat') }}</span>
       <button
         v-if="hasMoreChats"
         class="text-xs text-blue-2"
         @click="toggleShowMore"
       >
-        {{ showAll ? 'Show Less' : `Show More (${chatHistory.length - displayLimit})` }}
+        {{ showAll ? t('nav.showLess') : `${t('nav.showMore')} (${chatHistory.length - displayLimit})` }}
       </button>
     </div>
     <div class="flex-grow basis-0 overflow-x-hidden overflow-y-auto">

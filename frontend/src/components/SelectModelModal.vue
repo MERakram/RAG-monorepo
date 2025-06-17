@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { Btn } from '@roku-ui/vue'
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useModels } from '../composables'
 import { platform } from '../shared'
+
+const { t } = useI18n()
 
 // Define models
 const modelValue = defineModel<boolean>()
@@ -92,7 +95,7 @@ function closeModal() {
         <div class="absolute top-10rem mx-4 max-w-md w-full overflow-hidden rounded-xl bg-[#1a1a1a] shadow-lg">
           <div class="flex items-center justify-between border-b border-neutral-800 p-4">
             <h3 class="text-lg text-white font-medium">
-              Select Model
+              {{ t('modals.selectModel') }}
             </h3>
             <Btn
               icon
@@ -115,7 +118,7 @@ function closeModal() {
                 v-model="searchQuery"
                 type="text"
                 class="w-full rounded-lg bg-neutral-800 p-2 pl-10 pr-8 text-white outline-none transition-colors focus:bg-neutral-700 focus:ring-2 focus:ring-neutral-600 placeholder-neutral-500"
-                placeholder="Search models..."
+                :placeholder="t('modals.searchModels')"
               >
               <button
                 v-if="searchQuery"
@@ -157,7 +160,7 @@ function closeModal() {
             >
               <i class="i-tabler-info-circle text-xl" />
               <p class="mt-2">
-                No Models Found
+                {{ t('messages.noModelsFound') }}
               </p>
             </div>
           </div>
@@ -167,7 +170,7 @@ function closeModal() {
               class="rounded-lg bg-neutral-700 px-4 py-2 text-sm text-white font-medium transition-colors hover:bg-neutral-600"
               @click="closeModal"
             >
-              Close
+              {{ t('common.close') }}
             </button>
           </div>
         </div>

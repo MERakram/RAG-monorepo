@@ -152,10 +152,216 @@ Répondez à la question en vous basant sur le contexte ci-dessus et UNIQUEMENT 
 Élaborez les idées et les concepts autant que possible à partir du contexte pour fournir une réponse complète et détaillée à la requête de l'utilisateur.
 """
 
+# --- COMPARISON TEMPLATES ---
+
+# English Comparison Templates
+COMPARISON_TEMPLATES_EN = {
+    "technical": """You are an expert in electrical standards analysis. Compare the two provided electrical standards documents with a focus on technical specifications, requirements, and implementation details.
+
+Context from knowledge base:
+{context}
+
+**Document 1: {file1_name}**
+{file1_content}
+
+**Document 2: {file2_name}**
+{file2_content}
+
+Provide a comprehensive technical comparison including:
+1. **Technical Specifications**: Compare voltage levels, current ratings, frequency ranges, measurement accuracy, and performance parameters
+2. **Implementation Requirements**: Analyze installation procedures, configuration methods, and technical constraints
+3. **Design Differences**: Highlight architectural variations, component specifications, and system integration approaches
+4. **Compatibility Analysis**: Assess interoperability, interface requirements, and system compatibility
+5. **Technical Standards Compliance**: Compare adherence to international standards and certification requirements
+
+Structure your response with clear headings and bullet points. Include specific references to clauses and requirements when possible.
+
+Question: Please provide a detailed technical comparison of these two electrical standards documents.""",
+
+    "compliance": """You are an expert in electrical standards compliance and regulatory frameworks. Compare the two provided electrical standards documents with a focus on regulatory requirements, safety standards, and compliance obligations.
+
+Context from knowledge base:
+{context}
+
+**Document 1: {file1_name}**
+{file1_content}
+
+**Document 2: {file2_name}**
+{file2_content}
+
+Provide a comprehensive compliance comparison including:
+1. **Regulatory Framework**: Compare applicable regulations, legal requirements, and jurisdictional scope
+2. **Safety Standards**: Analyze safety requirements, protection measures, and risk mitigation strategies
+3. **Certification Requirements**: Compare testing procedures, certification processes, and approval criteria
+4. **Compliance Obligations**: Detail mandatory requirements, documentation needs, and audit requirements
+5. **International Standards Alignment**: Assess alignment with IEC, IEEE, and other international standards
+
+Structure your response with clear headings and bullet points. Highlight critical compliance differences that could impact implementation.
+
+Question: Please provide a detailed compliance comparison of these two electrical standards documents.""",
+
+    "differences": """You are an expert in electrical standards analysis. Compare the two provided electrical standards documents and identify the key differences between them.
+
+Context from knowledge base:
+{context}
+
+**Document 1: {file1_name}**
+{file1_content}
+
+**Document 2: {file2_name}**
+{file2_content}
+
+Focus on identifying and highlighting the key differences including:
+1. **Scope and Application Differences**: What each standard covers differently
+2. **Technical Parameter Variations**: Different specifications, limits, and requirements
+3. **Procedural Differences**: Different testing methods, installation procedures, or operational requirements
+4. **Structural Differences**: Different organization, terminology, or classification systems
+5. **Version and Update Differences**: Changes between standard versions or editions
+
+For each difference identified:
+- Clearly state what differs between the standards
+- Explain the practical implications of these differences
+- Provide specific clause or section references where possible
+
+Structure your response to clearly distinguish between the two standards.
+
+Question: What are the key differences between these two electrical standards documents?""",
+
+    "similarities": """You are an expert in electrical standards analysis. Compare the two provided electrical standards documents and identify the similarities and common ground between them.
+
+Context from knowledge base:
+{context}
+
+**Document 1: {file1_name}**
+{file1_content}
+
+**Document 2: {file2_name}**
+{file2_content}
+
+Focus on identifying and highlighting the similarities including:
+1. **Common Scope and Applications**: Areas where both standards apply similarly
+2. **Shared Technical Requirements**: Similar specifications, parameters, and performance criteria
+3. **Compatible Procedures**: Common testing methods, installation approaches, or operational procedures
+4. **Aligned Principles**: Shared design philosophies, safety approaches, or technical concepts
+5. **Standard Harmonization**: Areas where standards are aligned with international frameworks
+
+For each similarity identified:
+- Explain what both standards share in common
+- Highlight areas of compatibility and alignment
+- Describe how these similarities benefit implementation
+
+Structure your response to emphasize the common ground and compatibility between the standards.
+
+Question: What are the key similarities and common elements between these two electrical standards documents?"""
+}
+
+# French Comparison Templates
+COMPARISON_TEMPLATES_FR = {
+    "technical": """Vous êtes un expert en analyse de normes électriques. Comparez les deux documents de normes électriques fournis en vous concentrant sur les spécifications techniques, les exigences et les détails d'implémentation.
+
+Contexte de la base de connaissances :
+{context}
+
+**Document 1 : {file1_name}**
+{file1_content}
+
+**Document 2 : {file2_name}**
+{file2_content}
+
+Fournissez une comparaison technique complète incluant :
+1. **Spécifications Techniques** : Comparez les niveaux de tension, les courants nominaux, les plages de fréquence, la précision de mesure et les paramètres de performance
+2. **Exigences d'Implémentation** : Analysez les procédures d'installation, les méthodes de configuration et les contraintes techniques
+3. **Différences de Conception** : Mettez en évidence les variations architecturales, les spécifications des composants et les approches d'intégration système
+4. **Analyse de Compatibilité** : Évaluez l'interopérabilité, les exigences d'interface et la compatibilité système
+5. **Conformité aux Normes Techniques** : Comparez l'adhésion aux normes internationales et aux exigences de certification
+
+Structurez votre réponse avec des titres clairs et des puces. Incluez des références spécifiques aux clauses et exigences quand c'est possible.
+
+Question : Veuillez fournir une comparaison technique détaillée de ces deux documents de normes électriques.""",
+
+    "compliance": """Vous êtes un expert en conformité aux normes électriques et en cadres réglementaires. Comparez les deux documents de normes électriques fournis en vous concentrant sur les exigences réglementaires, les normes de sécurité et les obligations de conformité.
+
+Contexte de la base de connaissances :
+{context}
+
+**Document 1 : {file1_name}**
+{file1_content}
+
+**Document 2 : {file2_name}**
+{file2_content}
+
+Fournissez une comparaison de conformité complète incluant :
+1. **Cadre Réglementaire** : Comparez les réglementations applicables, les exigences légales et la portée juridictionnelle
+2. **Normes de Sécurité** : Analysez les exigences de sécurité, les mesures de protection et les stratégies d'atténuation des risques
+3. **Exigences de Certification** : Comparez les procédures d'essai, les processus de certification et les critères d'approbation
+4. **Obligations de Conformité** : Détaillez les exigences obligatoires, les besoins de documentation et les exigences d'audit
+5. **Alignement avec les Normes Internationales** : Évaluez l'alignement avec les normes IEC, IEEE et autres normes internationales
+
+Structurez votre réponse avec des titres clairs et des puces. Mettez en évidence les différences critiques de conformité qui pourraient impacter l'implémentation.
+
+Question : Veuillez fournir une comparaison détaillée de conformité de ces deux documents de normes électriques.""",
+
+    "differences": """Vous êtes un expert en analyse de normes électriques. Comparez les deux documents de normes électriques fournis et identifiez les différences clés entre eux.
+
+Contexte de la base de connaissances :
+{context}
+
+**Document 1 : {file1_name}**
+{file1_content}
+
+**Document 2 : {file2_name}**
+{file2_content}
+
+Concentrez-vous sur l'identification et la mise en évidence des différences clés incluant :
+1. **Différences de Portée et d'Application** : Ce que chaque norme couvre différemment
+2. **Variations des Paramètres Techniques** : Différentes spécifications, limites et exigences
+3. **Différences Procédurales** : Différentes méthodes d'essai, procédures d'installation ou exigences opérationnelles
+4. **Différences Structurelles** : Organisation, terminologie ou systèmes de classification différents
+5. **Différences de Version et de Mise à Jour** : Changements entre les versions ou éditions des normes
+
+Pour chaque différence identifiée :
+- Énoncez clairement ce qui diffère entre les normes
+- Expliquez les implications pratiques de ces différences
+- Fournissez des références spécifiques aux clauses ou sections quand c'est possible
+
+Structurez votre réponse pour distinguer clairement les deux normes.
+
+Question : Quelles sont les différences clés entre ces deux documents de normes électriques ?""",
+
+    "similarities": """Vous êtes un expert en analyse de normes électriques. Comparez les deux documents de normes électriques fournis et identifiez les similitudes et points communs entre eux.
+
+Contexte de la base de connaissances :
+{context}
+
+**Document 1 : {file1_name}**
+{file1_content}
+
+**Document 2 : {file2_name}**
+{file2_content}
+
+Concentrez-vous sur l'identification et la mise en évidence des similitudes incluant :
+1. **Portée et Applications Communes** : Domaines où les deux normes s'appliquent de manière similaire
+2. **Exigences Techniques Partagées** : Spécifications, paramètres et critères de performance similaires
+3. **Procédures Compatibles** : Méthodes d'essai, approches d'installation ou procédures opérationnelles communes
+4. **Principes Alignés** : Philosophies de conception, approches de sécurité ou concepts techniques partagés
+5. **Harmonisation des Normes** : Domaines où les normes sont alignées avec les cadres internationaux
+
+Pour chaque similitude identifiée :
+- Expliquez ce que les deux normes partagent en commun
+- Mettez en évidence les domaines de compatibilité et d'alignement
+- Décrivez comment ces similitudes bénéficient à l'implémentation
+
+Structurez votre réponse pour mettre l'accent sur les points communs et la compatibilité entre les normes.
+
+Question : Quelles sont les similitudes clés et éléments communs entre ces deux documents de normes électriques ?"""
+}
+
 # Dict of all available prompts for easy import
 PROMPT_TEMPLATES = {
     "norm_expert_fr": NORM_EXPERT_FR,
     "norm_expert_en": NORM_EXPERT_EN,
     "simple_rag_template": SIMPLE_RAG_TEMPLATE,
     "simple_rag_template_fr": SIMPLE_RAG_TEMPLATE_FR,
+    "comparison_templates_en": COMPARISON_TEMPLATES_EN,
+    "comparison_templates_fr": COMPARISON_TEMPLATES_FR,
 }

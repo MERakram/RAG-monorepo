@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { Btn } from '@roku-ui/vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCollections } from '../composables/useCollections' // New composable
+
+const { t } = useI18n()
 
 // Define models
 const modelValue = defineModel<boolean>() // For v-model (visibility)
@@ -108,7 +111,7 @@ function closeModal() {
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-4 max-w-md w-full overflow-hidden rounded-xl bg-[#1a1a1a] shadow-lg">
           <div class="flex items-center justify-between border-b border-neutral-800 p-4">
             <h3 class="text-lg text-white font-medium">
-              Select Collection
+              {{ t('nav.selectNorme') }}
             </h3>
             <Btn
               icon
@@ -131,7 +134,7 @@ function closeModal() {
                 v-model="searchQuery"
                 type="text"
                 class="w-full rounded-lg bg-neutral-800 p-2 pl-10 pr-8 text-white outline-none transition-colors focus:bg-neutral-700 focus:ring-2 focus:ring-neutral-600 placeholder-neutral-500"
-                placeholder="Search collections..."
+                :placeholder="t('common.search') + ' ' + t('nav.normes').toLowerCase() + '...'"
               >
               <button
                 v-if="searchQuery"
@@ -173,7 +176,7 @@ function closeModal() {
             >
               <i class="i-tabler-info-circle text-xl" />
               <p class="mt-2">
-                No Collections Found
+                {{ t('messages.noNormesFound') }}
               </p>
             </div>
           </div>
@@ -183,7 +186,7 @@ function closeModal() {
               class="rounded-lg bg-neutral-700 px-4 py-2 text-sm text-white font-medium transition-colors hover:bg-neutral-600"
               @click="closeModal"
             >
-              Close
+              {{ t('common.close') }}
             </button>
           </div>
         </div>

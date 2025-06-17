@@ -20,14 +20,16 @@ class QueryStatus(Enum):
 
 # Standards scope for validation
 SUPPORTED_STANDARDS = [
-    "IEC 61557-12",
+    "IEC 61557",
     "IEC 60688",
     "IEC 61850",
     "IEC 60051",
     "IEC 61869",
     "IEC 62053",
-    "EN50470",
+    "EN 50470",
     "IEC 61810",
+    "IEC 61010",
+    "IEC 61326",
 ]
 
 

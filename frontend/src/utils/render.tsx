@@ -2,7 +2,8 @@ import type Renderer from 'markdown-it/lib/renderer.mjs'
 import type Token from 'markdown-it/lib/token.mjs'
 import type { VNode } from 'vue'
 import { escapeHtml, unescapeAll } from 'markdown-it/lib/common/utils.mjs'
-import { Comment, createVNode, Fragment, h, Text } from 'vue'
+import { Comment, createVNode, Fragment, h, Text, defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export interface Plugin<Ctx = any> {
   name: string
@@ -124,6 +125,7 @@ const CodeBlockWrapper = defineComponent({
   },
   setup(props) {
     const copied = ref(false)
+    const { t } = useI18n()
 
     const copyCode = () => {
       const tempElement = document.createElement('div')
@@ -137,7 +139,7 @@ const CodeBlockWrapper = defineComponent({
       })
     }
 
-    return { copyCode, copied }
+    return { copyCode, copied, t }
   },
   render() {
     return h('div', {
@@ -146,11 +148,15 @@ const CodeBlockWrapper = defineComponent({
       h('div', {
         class: 'code-block-toolbar bg-neutral-9 border-b px-4 text-neutral-4 py-2 flex justify-between items-center',
       }, [
-        h('span', { class: 'code-language text-sm uppercase font-mono' }, this.language || 'text'),
+        h('span', { class: 'code-language text-sm uppercase font-mono' }, this.language || this.t('codeBlock.defaultLanguage')),
         h('button', {
-          class: 'copy-button text-sm w-6 h-6 rounded hover:bg-neutral-7 leading-0',
+          class: 'copy-button text-sm px-2 py-1 rounded hover:bg-neutral-7 transition-colors',
+          title: this.copied ? this.t('codeBlock.copied') : this.t('codeBlock.copy'),
           onClick: this.copyCode,
-        }, this.copied ? h('i', { class: 'i-tabler-check' }) : h('i', { class: 'i-tabler-copy' })),
+        }, [
+          this.copied ? h('i', { class: 'i-tabler-check text-green-400' }) : h('i', { class: 'i-tabler-copy' }),
+          h('span', { class: 'ml-1 text-xs' }, this.copied ? this.t('codeBlock.copied') : this.t('codeBlock.copy'))
+        ]),
       ]),
       h('div', { class: 'code-content' }, [
         h('pre', this.preAttrs, [createVNode('code', { innerHTML: this.content }, [])]),
