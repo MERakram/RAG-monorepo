@@ -83,13 +83,13 @@ async function handleLogout() {
       <div class="flex items-center gap-2">
         <div class="flex items-center pr-2 text-lg">
           <i class="i-tabler-database text-green-400" />
-          <span class="pl-2 text-sm font-medium">{{ t('nav.normes') }}</span>
+          <span class="pl-2 text-sm font-medium">{{ t('nav.collections') }}</span>
         </div>
         <button
           class="min-w-36 flex items-center justify-between rounded-full bg-[#1e1e1f] px-6 py-2 text-sm text-[#e3e3e3] transition-all focus:border-neutral-500/50 hover:bg-[#252526] focus:ring-2 focus:ring-neutral-500/20"
           @click="showSelectCollectionModal = true"
         >
-          <span class="truncate pr-2">{{ selectedCollection || t('nav.selectNorme') }}</span>
+          <span class="truncate pr-2">{{ selectedCollection || t('nav.selectCollection') }}</span>
           <i class="i-tabler-chevron-down text-xs opacity-60" />
         </button>
       </div>
@@ -196,13 +196,13 @@ async function handleLogout() {
           <div class="flex flex-col gap-2">
             <label class="flex items-center gap-2 text-sm font-medium">
               <i class="i-tabler-database text-green-400" />
-              {{ t('nav.normes') }}
+              {{ t('nav.collections') }}
             </label>
             <button
               class="w-full flex items-center justify-between rounded-lg bg-[#1e1e1f] px-4 py-2 text-sm text-[#e3e3e3] transition-all focus:border-neutral-500/50 hover:bg-[#252526] focus:ring-2 focus:ring-neutral-500/20"
               @click="showSelectCollectionModal = true; showMobileMenu = false"
             >
-              <span class="truncate">{{ selectedCollection || t('nav.selectNorme') }}</span>
+              <span class="truncate">{{ selectedCollection || t('nav.selectCollection') }}</span>
               <i class="i-tabler-chevron-down text-xs opacity-60" />
             </button>
           </div>

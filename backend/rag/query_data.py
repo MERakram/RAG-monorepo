@@ -1,4 +1,4 @@
-import asyncio
+# import asyncio
 import html
 import os
 import logging
@@ -112,7 +112,7 @@ async def query_rag_async(
 
         # Preserving original logging
         logging.info(f"Scores: {[_score for doc, _score in results]}")
-        return "Je n'ai pas d'information sur ce sujet. Vous pouvez me poser des questions sur les normes suivantes:\n- IEC 61557-12: Norme de mesure électrique\n- IEC 60688: Norme convertisseur de mesure\n- IEC 61850: Norme protocole de communication poste numérique\n- IEC 60051-X: Norme indicateur analogique\n- IEC 61869-X: Norme transformateur de courant\n- IEC 62053-X: Norme compteur électrique\n- EN50470-X: Norme compteur électrique MID\n- IEC 61810-X: Norme Relais"
+        return "Je n'ai pas d'information sur ce sujet dans les documents fournis. Je peux vous aider à analyser et répondre à des questions basées sur des documents techniques, manuels, rapports ou toute autre documentation fournie."
 
     # Log the query and results
     logging.info(f"Query: {query_text}")
@@ -309,13 +309,13 @@ async def compare_standards_async(
     collection_name: str = COLLECTION_NAME,
 ):
     """
-    Compare two electrical standards documents using RAG context and specialized prompts.
+    Compare two documents using RAG context and specialized prompts.
 
     Args:
-        file1_content: Content of the first standard document
-        file1_name: Name of the first standard document
-        file2_content: Content of the second standard document
-        file2_name: Name of the second standard document
+        file1_content: Content of the first document
+        file1_name: Name of the first document
+        file2_content: Content of the second document
+        file2_name: Name of the second document
         mode: Comparison mode (technical, compliance, differences, similarities)
         vector_store: Optional vector store instance
         model_name: Optional model name override
@@ -556,81 +556,49 @@ Répondez de manière complète et technique, en utilisant le contenu du documen
         return f"Erreur lors du traitement du fichier PDF: {str(e)}"
 
 
-_chauvin_patterns = [
-    re.compile(r"Customer:", re.IGNORECASE),
+_generic_cleaning_patterns = [
+    re.compile(r"Customer:\s*.*", re.IGNORECASE),
     re.compile(r"No\.\s+of\s+User\(s\):\s*\d+", re.IGNORECASE),
-    re.compile(r"Company:\s*CHAUVIN\s+ARNOUX", re.IGNORECASE),
-    re.compile(r"Order\s+No\.:\s*", re.IGNORECASE),
-    re.compile(r"copyright\s+of\s+IEC,\s+Geneva,\s+Switzerland", re.IGNORECASE),
+    re.compile(r"Company:\s*.*", re.IGNORECASE),
+    re.compile(r"Order\s+No\.:\s*.*", re.IGNORECASE),
+    re.compile(r"copyright\s+of\s+.*", re.IGNORECASE),
     re.compile(r"All\s+rights\s+reserved", re.IGNORECASE),
     re.compile(r"licence\s+agreement", re.IGNORECASE),
-    re.compile(r"custserv@iec\.ch", re.IGNORECASE),
 ]
 
 
-def _remove_chauvin_block_programmatically(text_input: str, doc_path_info: str) -> str:
+def _remove_vendor_block_programmatically(text_input: str, doc_path_info: str) -> str:
     """
-    Programmatically removes the Chauvin Arnoux block from text.
-    This is an alternative to the slow regex.
+    Programmatically removes vendor-specific blocks from text.
+    This is a generic alternative to vendor-specific regex patterns.
     """
     output_parts = []
     current_search_start_index = 0
     text_len = len(text_input)
 
     while current_search_start_index < text_len:
-        # Find the start of a potential block ("Customer:")
-        # We search in the remainder of the text_input
-        match_p1 = _chauvin_patterns[0].search(
-            text_input, pos=current_search_start_index
-        )
-
-        if not match_p1:
-            # No more "Customer:" found, append the rest of the text
+        # Find the start of a potential block ("Customer:" or similar)
+        match_found = False
+        for pattern in _generic_cleaning_patterns:
+            match_p1 = pattern.search(text_input, pos=current_search_start_index)
+            if match_p1:
+                block_potential_start_index = match_p1.start()
+                output_parts.append(text_input[current_search_start_index:block_potential_start_index])
+                current_search_start_index = match_p1.end()
+                match_found = True
+                break
+        
+        if not match_found:
             output_parts.append(text_input[current_search_start_index:])
             break
 
-        # "Customer:" found.
-        block_potential_start_index = match_p1.start()
-
-        # Add text before this potential block start
-        output_parts.append(
-            text_input[current_search_start_index:block_potential_start_index]
-        )
-
-        # Try to match the rest of the sequence from this point
-        current_match_end_index = match_p1.end()
-        is_a_valid_chauvin_block = True
-
-        for i in range(1, len(_chauvin_patterns)):
-            next_pattern = _chauvin_patterns[i]
-            # Search for the next pattern starting from the end of the previous match
-            match_next_part = next_pattern.search(
-                text_input, pos=current_match_end_index
-            )
-
-            if not match_next_part:
-                is_a_valid_chauvin_block = False
-                break
-
-            # Update the end index for the next search
-            current_match_end_index = match_next_part.end()
-
-        if is_a_valid_chauvin_block:
-            # If it's a valid block, we skip its content by advancing current_search_start_index
-            # tqdm.write(f"ℹ️ [{doc_path_info}] Chauvin Arnoux block removed.") # Optional: Log when a block is removed
-            current_search_start_index = current_match_end_index
-        else:
-            # Not a valid block, so we keep the "Customer:" part we found
-            # and continue searching after it.
-            output_parts.append(
-                text_input[block_potential_start_index : match_p1.end()]
-            )
-            current_search_start_index = match_p1.end()
-
-    return "".join(output_parts)
+    return ''.join(output_parts)
 
 
 def clean_text(text, doc_path_info=""):
+    """
+    Clean text by removing vendor-specific blocks and formatting.
+    """
     cleaned = re.sub(r"<[^>]+>", "", text)  # Remove HTML tags
     cleaned = re.sub(
         r"\.{2,}", " ", cleaned
@@ -639,20 +607,19 @@ def clean_text(text, doc_path_info=""):
         r"\.\s+\.\s+\.\s+\.+", " ", cleaned
     )  # Replace spaced multiple dots
 
-    # Remove Chauvin Arnoux specific block
-    cleaned = _remove_chauvin_block_programmatically(cleaned, doc_path_info)
+    # Apply generic cleaning
+    cleaned = _remove_vendor_block_programmatically(cleaned, doc_path_info)
 
-    # This regex might also be slow if it's similar in structure. Monitor its performance.
-    # Remove general IEC copyright block
+    # Remove general copyright blocks (keep generic)
     cleaned = re.sub(
-        r"THIS PUBLICATION IS COPYRIGHT PROTECTED.*?Copyright © .*?IEC, Geneva, Switzerland.*?All rights reserved.*?Droits de reproduction réservés.*?IEC Central Office.*?www\.iec\.ch",
+        r"THIS PUBLICATION IS COPYRIGHT PROTECTED.*?Copyright.*?All rights reserved.*?",
         "",
         cleaned,
         flags=re.DOTALL | re.IGNORECASE,
     )
-    cleaned = re.sub(
-        r"Tel\.: \+41 22 919 02 11", "", cleaned
-    )  # Remove specific phone number
+    
+    # Remove common formatting patterns
+    cleaned = re.sub(r"Tel\.: \+[\d\s]+", "", cleaned)  # Remove phone numbers
     cleaned = html.unescape(cleaned)  # Unescape HTML entities
     cleaned = re.sub(r"\s+", " ", cleaned)  # Normalize whitespace to single spaces
 

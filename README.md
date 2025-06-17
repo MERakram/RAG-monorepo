@@ -1,19 +1,15 @@
-# CA-NormExpert
+# RAG Monorepo Template
 
 ## Overview
-CA-NormExpert is an AI assistant developed for Chauvin Arnoux Energy that allows users to query information about specific electrical norms and standards. This tool provides expert knowledge and guidance related to various international electrical standards.
+This is a comprehensive RAG (Retrieval-Augmented Generation) monorepo template that allows users to query information from their document collections. This tool provides AI-powered knowledge extraction and question-answering capabilities for various document types and domains.
 
-## Supported Norms
-The assistant can answer questions about the following norms:
+## Supported Document Types
+The assistant can work with various document formats including:
 
-- **IEC 61557-12**: Norme de mesure électrique (ENERIUM, TRIAD 3, MEMO P200)
-- **IEC 60688**: Norme convertisseur de mesure (TRIAD 2, TRIAD 3, T82N)
-- **IEC 61850**: Norme protocole de communication poste numérique (ELINK, TRIAD 3)
-- **IEC 60051-X**: Norme indicateur analogique (CLASSIC, NORMEUROPE, PN)
-- **IEC 61869-X**: Norme transformateur de courant (TRI500-600-700, JVS/JVP)
-- **IEC 62053-X**: Norme compteur électrique (ALTYS, Compteurs d'achat revente)
-- **EN50470-X**: Norme compteur électrique MID (ALTYS, Compteurs d'achat revente)
-- **IEC 61810-X**: Norme Relais (RELAIS AMRA ET REUX)
+- **PDF Documents**: Technical specifications, manuals, research papers
+- **Text Files**: Documentation, articles, reports  
+- **Word Documents**: Policies, procedures, guides
+- **Markdown Files**: Technical documentation, wikis
 
 ## Getting Started
 
@@ -24,8 +20,8 @@ The assistant can answer questions about the following norms:
 
 1. Clone the repository:
    ```bash
-   git clone https://git.chauvin-arnoux.com/elwaak00/CA-NormExpert
-   cd CA-NormExpert
+   git clone <your-repo-url>
+   cd RAG-monorepo
    ```
 
 2. Start the application using Docker Compose:
@@ -37,6 +33,15 @@ The assistant can answer questions about the following norms:
    ```
    http://localhost:3002
    ```
+
+## Features
+
+- **Document Upload**: Support for PDF, TXT, DOC, DOCX, and MD files
+- **Intelligent Querying**: AI-powered question answering based on document content
+- **Document Comparison**: Compare two documents and analyze differences/similarities
+- **Multi-language Support**: Interface available in multiple languages
+- **Real-time Streaming**: Live response streaming for better user experience
+- **Collection Management**: Organize documents into collections for better organization
 
 ## Configuration
 ### Setting the Model
@@ -68,12 +73,13 @@ These configurations are essential for proper functioning of the application and
 
 ## Usage
 
-To interact with CA-NormExpert:
+To interact with the RAG system:
 
 1. Type your question in the chat interface
-2. Format questions clearly, for example:
-   - "What are the key requirements in IEC 61557-12?"
-   - "Explain the differences between EN50470-X and IEC 62053-X"
-   - "How does IEC 61850 apply to TRIAD 3?"
+2. Upload documents to build your knowledge base
+3. Format questions clearly, for example:
+   - "What are the key points in this document?"
+   - "Compare the requirements between these two documents"
+   - "Explain the process described in the manual"
 
-The system will retrieve relevant information from the norms database and provide accurate responses.
+The system will retrieve relevant information from your document collection and provide accurate responses based on the content you've uploaded.

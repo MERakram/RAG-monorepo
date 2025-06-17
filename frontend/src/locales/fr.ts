@@ -16,8 +16,8 @@ export default {
     remove: 'Supprimer'
   },
   nav: {
-    normes: 'Norme',
-    selectNorme: 'Sélectionner une Norme',
+    collections: 'Collection',
+    selectCollection: 'Sélectionner une Collection',
     dashboard: 'Tableau de bord',
     settings: 'Paramètres',
     newChat: 'Nouveau Chat',
@@ -33,7 +33,7 @@ export default {
     user: 'Utilisateur',
     aiAssistant: 'Assistant IA',
     lastResponseTime: 'Temps de réponse :',
-    appName: 'CA-NormExpert Chat',
+    appName: 'RAG Expert Chat',
     model: 'Modèle',
     selectModel: 'Sélectionner un Modèle',
     selectModelPlaceholder: 'Sélectionner un Modèle',
@@ -68,16 +68,16 @@ export default {
     }
   },
   compare: {
-    title: 'Comparer les Normes',
-    subtitle: 'Comparer deux fichiers de normes électriques',
+    title: 'Comparer les Documents',
+    subtitle: 'Comparer deux documents pour identifier les différences et similitudes',
     analysisMode: 'Mode d\'Analyse',
-    standard1: 'Norme 1',
-    standard2: 'Norme 2',
+    document1: 'Document 1',
+    document2: 'Document 2',
     dropFileHere: 'Déposez le fichier ici ou cliquez pour parcourir',
     supportedFormats: 'Fichiers PDF, TXT, DOC, DOCX ou MD',
     generateComparison: 'Générer la Comparaison',
     generatingComparison: 'Génération de la Comparaison...',
-    analyzing: 'Analyse des normes et génération de la comparaison...',
+    analyzing: 'Analyse des documents et génération de la comparaison...',
     clickToStart: 'Cliquez pour commencer à comparer',
     modes: {
       technical: 'Technique',
@@ -100,7 +100,7 @@ export default {
     noResults: 'Aucun résultat à afficher pour le moment. Téléchargez des fichiers et cliquez sur générer pour commencer la comparaison.'
   },
   messages: {
-    noNormesFound: 'Aucune Norme Trouvée',
+    noCollectionsFound: 'Aucune Collection Trouvée',
     noModelsFound: 'Aucun Modèle Trouvé',
     success: 'Succès',
     error: 'Erreur',

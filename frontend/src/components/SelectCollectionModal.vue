@@ -111,7 +111,7 @@ function closeModal() {
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-4 max-w-md w-full overflow-hidden rounded-xl bg-[#1a1a1a] shadow-lg">
           <div class="flex items-center justify-between border-b border-neutral-800 p-4">
             <h3 class="text-lg text-white font-medium">
-              {{ t('nav.selectNorme') }}
+              {{ t('nav.selectCollection') }}
             </h3>
             <Btn
               icon
@@ -134,7 +134,7 @@ function closeModal() {
                 v-model="searchQuery"
                 type="text"
                 class="w-full rounded-lg bg-neutral-800 p-2 pl-10 pr-8 text-white outline-none transition-colors focus:bg-neutral-700 focus:ring-2 focus:ring-neutral-600 placeholder-neutral-500"
-                :placeholder="t('common.search') + ' ' + t('nav.normes').toLowerCase() + '...'"
+                :placeholder="t('modals.searchCollections')"
               >
               <button
                 v-if="searchQuery"
@@ -176,7 +176,7 @@ function closeModal() {
             >
               <i class="i-tabler-info-circle text-xl" />
               <p class="mt-2">
-                {{ t('messages.noNormesFound') }}
+                {{ t('messages.noCollectionsFound') }}
               </p>
             </div>
           </div>

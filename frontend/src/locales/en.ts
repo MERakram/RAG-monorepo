@@ -16,8 +16,8 @@ export default {
     remove: 'Remove'
   },
   nav: {
-    normes: 'Standard',
-    selectNorme: 'Select Standard',
+    collections: 'Collection',
+    selectCollection: 'Select Collection',
     dashboard: 'Dashboard',
     settings: 'Settings',
     newChat: 'New Chat',
@@ -33,7 +33,7 @@ export default {
     user: 'User',
     aiAssistant: 'AI Assistant',
     lastResponseTime: 'Last response time:',
-    appName: 'CA-NormExpert Chat',
+    appName: 'RAG Expert Chat',
     model: 'Model',
     selectModel: 'Select Model',
     selectModelPlaceholder: 'Select Model',
@@ -68,16 +68,16 @@ export default {
     }
   },
   compare: {
-    title: 'Compare Standards',
-    subtitle: 'Compare two electrical standards files',
+    title: 'Compare Documents',
+    subtitle: 'Compare two documents to identify differences and similarities',
     analysisMode: 'Analysis Mode',
-    standard1: 'Standard 1',
-    standard2: 'Standard 2',
+    document1: 'Document 1',
+    document2: 'Document 2',
     dropFileHere: 'Drop file here or click to browse',
     supportedFormats: 'PDF, TXT, DOC, DOCX, or MD files',
     generateComparison: 'Generate Comparison',
     generatingComparison: 'Generating Comparison...',
-    analyzing: 'Analyzing standards and generating comparison...',
+    analyzing: 'Analyzing documents and generating comparison...',
     clickToStart: 'Click to start comparing',
     modes: {
       technical: 'Technical',
@@ -100,7 +100,7 @@ export default {
     noResults: 'No results to display yet. Upload files and click generate to start comparing.'
   },
   messages: {
-    noNormesFound: 'No Standards Found',
+    noCollectionsFound: 'No Collections Found',
     noModelsFound: 'No Models Found',
     success: 'Success',
     error: 'Error',
